@@ -310,10 +310,19 @@ export default function Guardian() {
 
             {/* Message Tables */}
             <Tabs defaultValue="recent" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="recent">Recent Messages</TabsTrigger>
-                <TabsTrigger value="flagged">Flagged Messages</TabsTrigger>
-                <TabsTrigger value="safe">Safe Messages</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 h-12 sm:h-10">
+                <TabsTrigger value="recent" className="text-xs sm:text-sm px-1 sm:px-3">
+                  <span className="hidden sm:inline">Recent Messages</span>
+                  <span className="sm:hidden">Recent</span>
+                </TabsTrigger>
+                <TabsTrigger value="flagged" className="text-xs sm:text-sm px-1 sm:px-3">
+                  <span className="hidden sm:inline">Flagged Messages</span>
+                  <span className="sm:hidden">Flagged</span>
+                </TabsTrigger>
+                <TabsTrigger value="safe" className="text-xs sm:text-sm px-1 sm:px-3">
+                  <span className="hidden sm:inline">Safe Messages</span>
+                  <span className="sm:hidden">Safe</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="recent" className="mt-4">
