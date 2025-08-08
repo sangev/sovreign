@@ -1,0 +1,84 @@
+Build a minimal Next.js (App Router) + React + Tailwind UI for “Aruna Talent • JULIUS”.
+Focus on one simple flow, not a dashboard.
+
+🎨 Brand & Theme
+- Primary brand color: #F8937E (peach/coral).
+- Include dark mode (system-aware + toggle). Keep #F8937E as the accent in dark mode.
+- Place the “aruna talent” logo centered in the header (accept a <Logo /> placeholder).
+
+🧭 Routes
+1) "/"                    -> Landing (no model context)
+2) "/m/[model]"          -> Landing with model preselected via URL
+3) "/answer"             -> ChatGPT-style answer view (read from query params or state)
+
+🌟 Landing Page ("/" and "/m/[model]")
+- Visually match the attached hero example (big friendly greeting).
+- Centered hero with:
+  - Logo above
+  - H1 greeting: “Hey there! What can JULIUS find for you?”
+  - Subtext: “Ask about any fan. I’ll pull the exact snippet.”
+- Single input bar with a Send button:
+  - Placeholder: “@fanusername what did we say we ate for dinner yesterday?”
+  - Autocomplete OFF, simple and fast.
+- Behavior:
+  - If on "/m/[model]", the model context is set from the route param (no need to type model again).
+  - On submit, call a placeholder function `fetchAnswer({ fan, model, question })`
+    and navigate to “/answer” with loading state.
+- Add small helper chips below input (optional): “Examples”, each injects an example query.
+- Mobile-first, smooth focus/hover states, subtle shadow on input, rounded pill design
+  similar to the reference screenshot.
+
+🔁 Loading/Transition
+- After pressing Send, show a quick transition overlay or skeleton while awaiting the response.
+
+💬 Answer Page ("/answer")
+- ChatGPT-style static answer view, clean and minimal:
+  - Big “Answer” card with the direct AI answer text.
+  - Below it, a “Conversation Snippet” card showing the exact matched messages
+    (monospace or subtle highlighted blocks).
+  - Small header chips: @fanusername, model name.
+- Buttons:
+  - “Ask Another” -> back to previous page (preserve model context)
+  - “Copy Answer” -> copies the answer + snippet
+- If the route originated from "/m/[model]", keep the page indexed to that model (e.g., breadcrumb “Aruna • [model]”).
+
+🧩 Components to create (simple, reusable):
+- <Header /> with logo + dark mode toggle.
+- <HeroSearch /> input bar with Send.
+- <LoadingOverlay />.
+- <AnswerCard answer={...} />.
+- <SnippetCard messages={[{speaker, text, timestamp}, ...]} />.
+- Small <Pill /> component for fan/model chips.
+
+🔌 API Integration (stubs only, do not build backend):
+- Create a simple data contract and mock the call:
+  - Request: { fan: string, model?: string, question: string }
+  - Response:
+    {
+      answer: string,
+      snippet: [{ speaker: "fan"|"model", text: string, timestamp?: string }],
+      fan: { username: string },
+      model: { name: string }
+    }
+- Implement `fetchAnswer()` in a client utility that returns mocked data for now
+  and is easy to swap to a real endpoint later.
+
+🧠 Prompt Template (for backend – show inline in code comments, no server needed here):
+“@{fan} for {model} → {question}. Return a concise answer and the exact conversation snippet that supports it.”
+
+🔖 Model‑Indexed Pages
+- If user visits “/m/[model]”, prefill hidden model context in state and show the same hero.
+- Any query from this route automatically uses that model—user only types the fan + question.
+
+♿ Accessibility & UX
+- Keyboard submit (Enter)
+- Button has aria‑label
+- High contrast in dark mode
+- Responsive, works great on mobile
+
+Deliverables
+- Next.js App Router project structure
+- Tailwind configured
+- Pages: "/", "/m/[model]", "/answer"
+- All components wired with mocked `fetchAnswer`
+- Brand color + dark mode fully applied
