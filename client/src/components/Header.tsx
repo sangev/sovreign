@@ -35,7 +35,7 @@ export default function Header() {
         <Logo className="w-10 h-10" />
         <div>
           <h1 className="text-lg font-bold text-gray-900 dark:text-white">aruna talent</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">JULIUS</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Recall</p>
         </div>
       </div>
       

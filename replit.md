@@ -1,6 +1,6 @@
 # Overview
 
-ConvoAI is a modern web application that provides AI-powered conversation analysis for OnlyFans and Chaturbate creators. The platform allows users to ask natural language questions about fan conversations and receive intelligent insights about their interactions, payment history, and engagement patterns. Built with a full-stack TypeScript architecture, the application features a React frontend with shadcn/ui components and an Express.js backend with PostgreSQL database integration.
+Aruna Talent • Recall is a modern web application that provides AI-powered conversation analysis for content creators. The platform allows users to ask natural language questions about fan conversations using @username mentions and receive intelligent insights about their interactions. Built with a full-stack TypeScript architecture, the application features a clean ChatGPT-style React frontend with shadcn/ui components and automatic fan lookup functionality.
 
 # User Preferences
 
