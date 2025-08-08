@@ -22,10 +22,10 @@ export default function ModelPage() {
       const usernameMatch = query.match(/@(\w+)/);
       const fanUsername = usernameMatch ? usernameMatch[1] : "unknown";
       
-      // Fetch answer using the model from URL
+      // Fetch answer using the agency model from URL
       const result = await fetchAnswer({
         fan: fanUsername,
-        model: model,
+        agencyModel: model,
         question: query
       });
       
@@ -53,7 +53,7 @@ export default function ModelPage() {
           {/* Model Context Header */}
           <div className="mb-4">
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              aruna talent • <span className="font-semibold text-primary">{model}</span>
+              aruna talent • <span className="font-semibold text-primary capitalize">{model.replace('_', ' ')}</span>
             </p>
           </div>
           
@@ -70,7 +70,7 @@ export default function ModelPage() {
             What can Atlas find for you?
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
-            Ask about any fan. I'll pull the exact snippet for <span className="font-semibold text-primary">{model}</span>.
+            Ask about any fan. I'll pull the exact snippet for <span className="font-semibold text-primary capitalize">{model.replace('_', ' ')}</span>.
           </p>
         </div>
 

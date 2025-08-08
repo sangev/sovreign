@@ -22,7 +22,7 @@ export default function Home() {
       // Fetch answer using the mock API
       const result = await fetchAnswer({
         fan: fanUsername,
-        model: "default_model",
+        agencyModel: "default",
         question: query
       });
       

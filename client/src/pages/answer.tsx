@@ -91,19 +91,19 @@ export default function AnswerPage() {
       <Header />
       
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Breadcrumb and Context Pills */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
-          <div className="flex flex-wrap items-center gap-3">
-            {fromModelPage && (
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                aruna talent • {model}
-              </div>
-            )}
-            <div className="flex flex-wrap items-center gap-3">
-              <Pill variant="fan">@{fan}</Pill>
-              <Pill variant="model">{model}</Pill>
+        {/* Breadcrumb */}
+        {fromModelPage && (
+          <div className="mb-6">
+            <div className="text-lg text-gray-600 dark:text-gray-400">
+              Aruna Talent / <span className="font-semibold text-primary capitalize">{model.replace('_', ' ')}</span>
             </div>
           </div>
+        )}
+
+        {/* Context Pills */}
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          <Pill variant="fan">@{fan}</Pill>
+          <Pill variant="model">{model}</Pill>
         </div>
 
         {/* Big Answer Card - ChatGPT style */}
