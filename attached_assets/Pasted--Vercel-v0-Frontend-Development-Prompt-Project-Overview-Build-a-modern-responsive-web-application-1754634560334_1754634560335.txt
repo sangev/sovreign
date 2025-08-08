@@ -1,0 +1,54 @@
+🚀 Vercel v0 Frontend Development Prompt
+Project Overview
+Build a modern, responsive web application for analyzing OnlyFans conversations using AI. The app allows users to ask natural language questions about fan conversations and get AI-powered answers in real-time.
+Core Features to Implement
+1. Main Dashboard
+Header: Logo, navigation, user profile
+Search Bar: Natural language query input with autocomplete
+Fan Selection: Dropdown/list to select specific fans by name
+Question Templates: Pre-built question buttons for common queries
+Results Display: Clean, formatted AI responses with conversation context
+2. Conversation Analysis Interface
+Query Input: Large text area for natural language questions
+Fan Filter: Search and filter by OnlyFans/Chaturbate usernames
+Timeline Filter: Date range selector (last 24h, 48h, 72h, custom)
+Question Categories:
+Food mentions ("What did we eat yesterday?")
+Appointments ("What hair appointments did we mention?")
+Gifts ("What gifts did we receive?")
+Activities ("What did we do today?")
+General context ("What did the fan ask about?")
+3. Results Display
+AI Response Card: Clean, readable format for answers
+Conversation Context: Show relevant message snippets
+Confidence Indicator: Visual indicator of answer accuracy
+Follow-up Questions: Suggested related questions
+Export Options: Copy to clipboard, download as PDF
+4. Fan Management
+Fan List: Grid/list view of all fans with stats
+Fan Cards: Show message count, payment amount, last activity
+Quick Actions: Ask common questions directly from fan cards
+Search/Filter: Find fans by name, activity level, payment amount
+5. Analytics Dashboard
+Conversation Stats: Total messages, payments, active fans
+Question Analytics: Most asked questions, popular topics
+Timeline View: Activity over time with key events
+Payment Tracking: Revenue from conversations
+Technical Requirements
+Design System
+Color Scheme: Professional, modern (blues, grays, accent colors)
+Typography: Clean, readable fonts (Inter, Roboto)
+Icons: Consistent icon set (Lucide, Heroicons)
+Responsive: Mobile-first design, tablet and desktop optimized
+UI Components
+Input Fields: Search bars, text areas, dropdowns
+Cards: Fan cards, result cards, stat cards
+Buttons: Primary, secondary, ghost variants
+Modals: Question templates, settings, help
+Loading States: Skeleton loaders, spinners
+Error Handling: User-friendly error messages
+Interactions
+Real-time Search: Instant fan search and filtering
+Auto-save: Save draft questions
+Keyboard Shortcuts: Quick actions (Ctrl+K for search)
+Responsive Animations: Smooth transitions and micro-interactions
