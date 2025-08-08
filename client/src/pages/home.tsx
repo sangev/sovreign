@@ -27,7 +27,7 @@ export default function Home() {
       });
       
       // Navigate to answer page with results
-      setLocation(`/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}`);
+      setLocation(`/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}&from=home`);
       
     } catch (error) {
       console.error("Failed to fetch answer:", error);
