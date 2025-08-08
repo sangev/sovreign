@@ -13,7 +13,13 @@ export default function ModelPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (query: string) => {
-    if (!model) return;
+    if (!model) {
+      console.log("No model found in URL");
+      return;
+    }
+    
+    console.log("Starting search with query:", query);
+    console.log("Model from URL:", model);
     
     setIsLoading(true);
     
@@ -22,6 +28,8 @@ export default function ModelPage() {
       const usernameMatch = query.match(/@(\w+)/);
       const fanUsername = usernameMatch ? usernameMatch[1] : "unknown";
       
+      console.log("Fan username extracted:", fanUsername);
+      
       // Fetch answer using the agency model from URL
       const result = await fetchAnswer({
         fan: fanUsername,
@@ -29,8 +37,13 @@ export default function ModelPage() {
         question: query
       });
       
+      console.log("Fetch result:", result);
+      
       // Navigate to answer page with results and model context
-      setLocation(`/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}&from=model`);
+      const answerUrl = `/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}&from=model`;
+      console.log("Navigating to:", answerUrl);
+      
+      setLocation(answerUrl);
       
     } catch (error) {
       console.error("Failed to fetch answer:", error);

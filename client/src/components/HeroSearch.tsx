@@ -20,7 +20,12 @@ export default function HeroSearch({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim() || loading) return;
+    console.log("Form submitted with query:", query);
+    if (!query.trim() || loading) {
+      console.log("Query is empty or loading, skipping submission");
+      return;
+    }
+    console.log("Calling onSubmit with:", query.trim());
     onSubmit(query.trim());
   };
 
