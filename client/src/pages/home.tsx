@@ -30,7 +30,7 @@ export default function Home() {
       sessionStorage.setItem('atlas_answer_data', JSON.stringify({
         answer: result.answer,
         snippet: result.snippet,
-        fan: result.fan.username,
+        fan: result.fan,
         model: result.model.name,
         fromModelPage: false
       }));

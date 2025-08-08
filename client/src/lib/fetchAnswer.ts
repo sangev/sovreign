@@ -14,6 +14,9 @@ interface FetchAnswerResponse {
   }>;
   fan: {
     username: string;
+    displayName: string;
+    age: number;
+    platformUsername?: string;
   };
   model: {
     name: string; // This is the agency model name (e.g., sophia_lee)
@@ -45,7 +48,12 @@ const mockResponses: Record<string, FetchAnswerResponse[]> = {
           timestamp: "2:33 PM"
         }
       ],
-      fan: { username: "tina" },
+      fan: { 
+        username: "tina", 
+        displayName: "Christina", 
+        age: 28, 
+        platformUsername: "christina_xoxo" 
+      },
       model: { name: "sophia_lee" }
     },
     {
@@ -67,7 +75,12 @@ const mockResponses: Record<string, FetchAnswerResponse[]> = {
           timestamp: "Yesterday 3:18 PM"
         }
       ],
-      fan: { username: "jessica" },
+      fan: { 
+        username: "jessica", 
+        displayName: "Jessica", 
+        age: 32, 
+        platformUsername: "jess_luxe" 
+      },
       model: { name: "sophia_lee" }
     }
   ],
@@ -91,7 +104,12 @@ const mockResponses: Record<string, FetchAnswerResponse[]> = {
           timestamp: "Today 10:18 AM"
         }
       ],
-      fan: { username: "sarah" },
+      fan: { 
+        username: "sarah", 
+        displayName: "Sarah", 
+        age: 26, 
+        platformUsername: "sarahlive" 
+      },
       model: { name: "default_model" }
     }
   ]
@@ -138,7 +156,12 @@ export async function fetchAnswer({ fan, agencyModel = "default", question }: Fe
   
   return {
     ...matchingResponse,
-    fan: { username: targetFan },
+    fan: { 
+      username: targetFan,
+      displayName: matchingResponse.fan.displayName,
+      age: matchingResponse.fan.age,
+      platformUsername: matchingResponse.fan.platformUsername
+    },
     model: { name: agencyModel }
   };
 }

@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Pill from "@/components/Pill";
+import ChatInterface from "@/components/ChatInterface";
 import { fetchAnswer } from "@/lib/fetchAnswer";
 
 interface Message {
@@ -20,6 +21,7 @@ export default function AnswerPage() {
   const [answer, setAnswer] = useState("");
   const [snippet, setSnippet] = useState<Message[]>([]);
   const [fan, setFan] = useState("");
+  const [fanData, setFanData] = useState<{username: string; displayName: string; age: number; platformUsername?: string} | null>(null);
   const [model, setModel] = useState("");
   const [fromModelPage, setFromModelPage] = useState(false);
   const { toast } = useToast();
@@ -33,7 +35,8 @@ export default function AnswerPage() {
         const data = JSON.parse(storedData);
         setAnswer(data.answer);
         setSnippet(data.snippet);
-        setFan(data.fan);
+        setFan(data.fan.username || data.fan);
+        setFanData(typeof data.fan === 'object' ? data.fan : null);
         setModel(data.model);
         setFromModelPage(data.fromModelPage || false);
         
@@ -124,40 +127,20 @@ export default function AnswerPage() {
           </CardContent>
         </Card>
 
-        {/* Conversation Snippet Card */}
-        <Card className="mb-8 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-xl">
-          <CardContent className="pt-6 pb-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-              Conversation Snippet
-            </h2>
-            <div className="space-y-4">
-              {snippet.map((message, index) => (
-                <div
-                  key={index}
-                  className={`p-4 rounded-lg font-mono text-sm border-l-4 ${
-                    message.speaker === "fan"
-                      ? "bg-blue-50/70 dark:bg-blue-900/20 border-l-blue-400 text-blue-900 dark:text-blue-100"
-                      : "bg-primary/10 border-l-primary text-primary dark:text-primary-foreground"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <span className="font-semibold text-xs uppercase tracking-wide opacity-80">
-                      {message.speaker}
-                    </span>
-                    {message.timestamp && (
-                      <span className="text-xs opacity-60">
-                        {message.timestamp}
-                      </span>
-                    )}
-                  </div>
-                  <p className="font-normal leading-relaxed text-base">
-                    "{message.text}"
-                  </p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Conversation Snippet - OnlyFans Style Interface */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+            Conversation Snippet
+          </h2>
+          <ChatInterface 
+            messages={snippet}
+            fanName={fanData?.displayName || "Javier"}
+            fanUsername={fanData?.platformUsername || fan}
+            fanAge={fanData?.age || 35}
+            modelName={model.replace('_', ' ')}
+            className="mx-auto"
+          />
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-4 justify-center mb-8">
