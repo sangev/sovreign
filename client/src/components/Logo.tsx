@@ -7,6 +7,10 @@ export default function Logo({ className = "w-8 h-8" }: { className?: string }) 
         src={logoImage} 
         alt="Atlas Logo" 
         className="w-full h-full object-contain"
+        style={{ 
+          mixBlendMode: 'multiply',
+          filter: 'brightness(1.1) contrast(1.1)'
+        }}
       />
     </div>
   );
