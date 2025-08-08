@@ -24,26 +24,30 @@ export default function AnswerPage() {
   const [fromModelPage, setFromModelPage] = useState(false);
   const { toast } = useToast();
 
-  // Parse URL parameters
+  // Load data from sessionStorage
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.split('?')[1] || '');
-    const answerParam = urlParams.get('answer');
-    const snippetParam = urlParams.get('snippet');
-    const fanParam = urlParams.get('fan');
-    const modelParam = urlParams.get('model');
-    const fromParam = urlParams.get('from');
-
-    if (answerParam && snippetParam && fanParam && modelParam) {
-      setAnswer(decodeURIComponent(answerParam));
-      setSnippet(JSON.parse(decodeURIComponent(snippetParam)));
-      setFan(fanParam);
-      setModel(modelParam);
-      setFromModelPage(fromParam === 'model');
+    const storedData = sessionStorage.getItem('atlas_answer_data');
+    
+    if (storedData) {
+      try {
+        const data = JSON.parse(storedData);
+        setAnswer(data.answer);
+        setSnippet(data.snippet);
+        setFan(data.fan);
+        setModel(data.model);
+        setFromModelPage(data.fromModelPage || false);
+        
+        // Clear the data after loading to prevent stale data
+        sessionStorage.removeItem('atlas_answer_data');
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+        setLocation('/');
+      }
     } else {
-      // Redirect to home if no valid params
+      // Redirect to home if no stored data
       setLocation('/');
     }
-  }, [location, setLocation]);
+  }, [setLocation]);
 
   const copyAnswerAndSnippet = async () => {
     const snippetText = snippet

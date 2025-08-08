@@ -26,8 +26,16 @@ export default function Home() {
         question: query
       });
       
-      // Navigate to answer page with results
-      setLocation(`/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}&from=home`);
+      // Store result in sessionStorage and navigate to answer page
+      sessionStorage.setItem('atlas_answer_data', JSON.stringify({
+        answer: result.answer,
+        snippet: result.snippet,
+        fan: result.fan.username,
+        model: result.model.name,
+        fromModelPage: false
+      }));
+      
+      setLocation('/answer');
       
     } catch (error) {
       console.error("Failed to fetch answer:", error);

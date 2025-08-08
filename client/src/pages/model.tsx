@@ -13,13 +13,7 @@ export default function ModelPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (query: string) => {
-    if (!model) {
-      console.log("No model found in URL");
-      return;
-    }
-    
-    console.log("Starting search with query:", query);
-    console.log("Model from URL:", model);
+    if (!model) return;
     
     setIsLoading(true);
     
@@ -28,8 +22,6 @@ export default function ModelPage() {
       const usernameMatch = query.match(/@(\w+)/);
       const fanUsername = usernameMatch ? usernameMatch[1] : "unknown";
       
-      console.log("Fan username extracted:", fanUsername);
-      
       // Fetch answer using the agency model from URL
       const result = await fetchAnswer({
         fan: fanUsername,
@@ -37,13 +29,16 @@ export default function ModelPage() {
         question: query
       });
       
-      console.log("Fetch result:", result);
+      // Store result in sessionStorage to avoid URL length issues
+      sessionStorage.setItem('atlas_answer_data', JSON.stringify({
+        answer: result.answer,
+        snippet: result.snippet,
+        fan: result.fan.username,
+        model: result.model.name,
+        fromModelPage: true
+      }));
       
-      // Navigate to answer page with results and model context
-      const answerUrl = `/answer?fan=${result.fan.username}&model=${result.model.name}&answer=${encodeURIComponent(result.answer)}&snippet=${encodeURIComponent(JSON.stringify(result.snippet))}&from=model`;
-      console.log("Navigating to:", answerUrl);
-      
-      setLocation(answerUrl);
+      setLocation('/answer');
       
     } catch (error) {
       console.error("Failed to fetch answer:", error);
