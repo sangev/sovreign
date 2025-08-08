@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Logo from "@/components/Logo";
 import HeroSearch from "@/components/HeroSearch";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import Footer from "@/components/Footer";
 import { fetchAnswer } from "@/lib/fetchAnswer";
 
 export default function Home() {
@@ -51,7 +52,7 @@ export default function Home() {
             Hey there!
           </h1>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-            What can Recall find for you?
+            What can Atlas find for you?
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
             Ask about any fan. I'll pull the exact snippet.
@@ -67,6 +68,9 @@ export default function Home() {
 
       {/* Loading Overlay */}
       {isLoading && <LoadingOverlay />}
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

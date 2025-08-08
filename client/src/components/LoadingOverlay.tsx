@@ -6,7 +6,7 @@ export default function LoadingOverlay() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Recall is thinking...
+              Atlas is thinking...
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Finding the exact conversation snippet

@@ -5,6 +5,7 @@ import AnswerCard from "@/components/AnswerCard";
 import SnippetCard from "@/components/SnippetCard";
 import HeroSearch from "@/components/HeroSearch";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import Footer from "@/components/Footer";
 import Pill from "@/components/Pill";
 import { fetchAnswer } from "@/lib/fetchAnswer";
 
@@ -116,6 +117,9 @@ export default function AnswerPage() {
 
       {/* Loading Overlay */}
       {isLoading && <LoadingOverlay />}
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
