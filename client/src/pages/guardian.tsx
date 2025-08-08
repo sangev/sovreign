@@ -4,277 +4,383 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MessageCircle, 
-  Heart, 
   Shield, 
   TrendingUp, 
   Users, 
   DollarSign,
-  Clock,
   AlertTriangle,
-  Search
+  Search,
+  RefreshCw,
+  Play,
+  Eye,
+  UserCheck,
+  Settings
 } from "lucide-react";
 
-// Mock FansMetric data based on the integration strategy
+// Production-style data matching your Fan Spend Fetcher system
 const mockStats = {
-  recentMessages: 247,
-  flaggedMessages: 12,
-  safeMessages: 235,
-  totalRevenue: 3420,
-  totalSpend: 890,
-  daysActive: 28,
-  messageCount: 156,
-  flaggedCount: 3
+  recentMessages: 50,
+  flaggedMessages: 1,
+  safeMessages: 17721,
 };
 
-const mockFans = [
+const mockActiveModels = [
   {
-    id: 1,
-    name: "Christina",
-    username: "christina_xoxo", 
-    age: 28,
-    platform: "OnlyFans",
-    totalSpend: 320,
-    daysActive: 15,
-    messageCount: 45,
-    lastActive: "2h ago",
-    riskLevel: "low"
+    username: "anitahaa",
+    accountId: "069d36d8-072c-41f6-ad5b-58b98e9ae85b",
+    fans: 0,
+    lastSeen: "8/2/2025",
+    actions: "Remove"
   },
   {
-    id: 2,
-    name: "Mike", 
-    username: "mike_87",
-    age: 35,
-    platform: "OnlyFans", 
-    totalSpend: 180,
-    daysActive: 8,
-    messageCount: 23,
-    lastActive: "1d ago",
-    riskLevel: "medium"
+    username: "kearaworldd",
+    accountId: "0e5ccbe7-1e85-44e6-b465-f4224fb84d7",
+    fans: 0,
+    lastSeen: "8/2/2025",
+    actions: "Remove"
   },
   {
-    id: 3,
-    name: "Alex",
-    username: "alex_fan",
-    age: 42,
-    platform: "OnlyFans",
-    totalSpend: 500,
-    daysActive: 22,
-    messageCount: 67,
-    lastActive: "5m ago", 
-    riskLevel: "low"
+    username: "stellaxox",
+    accountId: "12ce4ae7-d75f-4292-a344-786d5eacae94",
+    fans: 0,
+    lastSeen: "8/2/2025",
+    actions: "Remove"
+  },
+  {
+    username: "emillyyyy",
+    accountId: "3381643f-dc7f-464-b4d4-6e9604f2bb3e",
+    fans: 0,
+    lastSeen: "8/2/2025",
+    actions: "Remove"
+  }
+];
+
+const mockRecentMessages = [
+  {
+    fanId: "135067239",
+    fanName: "User",
+    chatter: "Jonathan :D",
+    content: "not very far but yes we have some distance between us 😭 were the closest by heart but i need my own space to explore 😭",
+    timestamp: "8/5/2025, 9:03:25 PM",
+    status: "Safe",
+    actions: "Evaluate"
+  },
+  {
+    fanId: "464711074",
+    fanName: "Angelo999",
+    chatter: "Jonathan :D", 
+    content: "hehe im glad that makes u glad 😊 hehe it really does help me knowing even my smallest parts are being appreciated",
+    timestamp: "8/5/2025, 9:01:49 PM",
+    status: "Safe",
+    actions: "Evaluate"
+  },
+  {
+    fanId: "504905665",
+    fanName: "TheShyGuy53",
+    chatter: "Jonathan :D",
+    content: "i have tried the pillow but i dont like doing the extra washing of pillowcase 😣",
+    timestamp: "8/5/2025, 9:01:13 PM", 
+    status: "Safe",
+    actions: "Evaluate"
+  }
+];
+
+const mockFlaggedMessages = [
+  {
+    fanId: "504905665",
+    fanName: "u504905665",
+    chatter: "Dreine",
+    content: "thats rare to hear tbh. most guys dont even think like that. u saying that makes me feel seen and safe. so thanks for making me feel like more than just a body. even if this is all online, it doesnt feel fake when i talk to u 😊",
+    timestamp: "8/3/2025, 12:32:54 AM",
+    status: "Flagged",
+    reason: "Obfuscated fake detected"
   }
 ];
 
 export default function Guardian() {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredFans = mockFans.filter(fan => 
-    fan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    fan.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [dryRun, setDryRun] = useState(true);
+  const [autoRefresh, setAutoRefresh] = useState(false);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <Header />
       
-      <main className="max-w-6xl mx-auto p-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Guardian Dashboard
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Monitor fan interactions and platform analytics in real-time
-          </p>
-        </div>
-
-        {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                Recent Messages
-              </CardTitle>
-              <MessageCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
-                {mockStats.recentMessages}
-              </div>
-              <p className="text-xs text-blue-600 dark:text-blue-400">
-                Last 24 hours
+      <main className="max-w-7xl mx-auto p-4">
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                Fan Spend Fetcher
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Admin
               </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-red-700 dark:text-red-300">
-                Flagged Messages
-              </CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-900 dark:text-red-100">
-                {mockStats.flaggedMessages}
-              </div>
-              <p className="text-xs text-red-600 dark:text-red-400">
-                Need review
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-green-700 dark:text-green-300">
-                Safe Messages
-              </CardTitle>
-              <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-900 dark:text-green-100">
-                {mockStats.safeMessages}
-              </div>
-              <p className="text-xs text-green-600 dark:text-green-400">
-                Verified safe
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-orange-700 dark:text-orange-300">
-                Total Revenue
-              </CardTitle>
-              <DollarSign className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-orange-900 dark:text-orange-100">
-                ${mockStats.totalRevenue}
-              </div>
-              <p className="text-xs text-orange-600 dark:text-orange-400">
-                This month
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Fan Management Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Fan List */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Fan Management
-                </CardTitle>
-                <div className="flex items-center space-x-2">
-                  <Search className="h-4 w-4 text-gray-400" />
-                  <Input
-                    placeholder="Search fans..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-48"
-                  />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredFans.map((fan) => (
-                  <div 
-                    key={fan.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">
-                        {fan.name[0]}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 dark:text-white">
-                          {fan.name}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          @{fan.username} • {fan.age} • {fan.platform}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-4 text-sm">
-                      <div className="text-center">
-                        <div className="font-semibold text-gray-900 dark:text-white">
-                          ${fan.totalSpend}
-                        </div>
-                        <div className="text-gray-500 dark:text-gray-400">Spend</div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="font-semibold text-gray-900 dark:text-white">
-                          {fan.messageCount}
-                        </div>
-                        <div className="text-gray-500 dark:text-gray-400">Messages</div>
-                      </div>
-                      
-                      <Badge 
-                        variant={fan.riskLevel === 'low' ? 'secondary' : 'destructive'}
-                        className={fan.riskLevel === 'low' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}
-                      >
-                        {fan.riskLevel}
-                      </Badge>
-                      
-                      <div className="text-gray-500 dark:text-gray-400">
-                        {fan.lastActive}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Analytics
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Active Fans</span>
-                <span className="font-semibold">{filteredFans.length}</span>
-              </div>
-              
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Avg. Days Active</span>
-                <span className="font-semibold">
-                  {Math.round(filteredFans.reduce((acc, fan) => acc + fan.daysActive, 0) / filteredFans.length)}
-                </span>
-              </div>
-              
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total Messages</span>
-                <span className="font-semibold">
-                  {filteredFans.reduce((acc, fan) => acc + fan.messageCount, 0)}
-                </span>
-              </div>
-              
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total Spend</span>
-                <span className="font-semibold text-green-600">
-                  ${filteredFans.reduce((acc, fan) => acc + fan.totalSpend, 0)}
-                </span>
-              </div>
-              
-              <Button className="w-full mt-4" variant="outline">
-                View Detailed Analytics
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="default" size="sm">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
               </Button>
-            </CardContent>
-          </Card>
+              <Button variant="outline" size="sm">
+                Logout
+              </Button>
+            </div>
+          </div>
         </div>
+
+        {/* Admin Controls */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Admin Controls</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Button 
+                  variant={dryRun ? "default" : "outline"} 
+                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                >
+                  Dry Run: {dryRun ? "OFF" : "ON"}
+                </Button>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400">Auto Refresh:</span>
+                <Switch
+                  checked={autoRefresh}
+                  onCheckedChange={setAutoRefresh}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Model Management */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Model Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex space-x-4 mb-6">
+              <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Sync Models
+              </Button>
+              <Button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white">
+                <Eye className="h-4 w-4 mr-2" />
+                View Models
+              </Button>
+            </div>
+
+            {/* Active Models Table */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Active Models</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-2 text-gray-600 dark:text-gray-400">USERNAME</th>
+                      <th className="text-left p-2 text-gray-600 dark:text-gray-400">ACCOUNT ID</th>
+                      <th className="text-left p-2 text-gray-600 dark:text-gray-400">FANS</th>
+                      <th className="text-left p-2 text-gray-600 dark:text-gray-400">LAST SEEN</th>
+                      <th className="text-left p-2 text-gray-600 dark:text-gray-400">ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mockActiveModels.map((model, index) => (
+                      <tr key={index} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <td className="p-2">{model.username}</td>
+                        <td className="p-2 text-gray-500 text-xs font-mono">{model.accountId}</td>
+                        <td className="p-2">{model.fans}</td>
+                        <td className="p-2">{model.lastSeen}</td>
+                        <td className="p-2">
+                          <Button variant="destructive" size="sm">
+                            Remove
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Message Monitoring */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Message Monitoring</CardTitle>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Real-time outbound message evaluation</p>
+          </CardHeader>
+          <CardContent>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <CardContent className="p-4">
+                  <div className="text-lg font-semibold text-blue-700 dark:text-blue-300">Recent Messages</div>
+                  <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                    {mockStats.recentMessages}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800">
+                <CardContent className="p-4">
+                  <div className="text-lg font-semibold text-orange-700 dark:text-orange-300">Flagged Messages</div>
+                  <div className="text-2xl font-bold text-orange-900 dark:text-orange-100">
+                    {mockStats.flaggedMessages}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
+                <CardContent className="p-4">
+                  <div className="text-lg font-semibold text-green-700 dark:text-green-300">Safe Messages</div>
+                  <div className="text-2xl font-bold text-green-900 dark:text-green-100">
+                    {mockStats.safeMessages}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-4 mb-6">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                Load Recent Messages
+              </Button>
+              <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                View Flagged Messages
+              </Button>
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
+                View Safe Messages
+              </Button>
+            </div>
+
+            {/* Message Tables */}
+            <Tabs defaultValue="recent" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="recent">Recent Messages</TabsTrigger>
+                <TabsTrigger value="flagged">Flagged Messages</TabsTrigger>
+                <TabsTrigger value="safe">Safe Messages</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="recent" className="mt-4">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">FAN ID</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">FAN NAME</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">CHATTER</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">CONTENT</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">TIMESTAMP</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">STATUS</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mockRecentMessages.map((message, index) => (
+                        <tr key={index} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <td className="p-2">{message.fanId}</td>
+                          <td className="p-2">{message.fanName}</td>
+                          <td className="p-2">{message.chatter}</td>
+                          <td className="p-2 max-w-xs truncate">{message.content}</td>
+                          <td className="p-2 text-xs">{message.timestamp}</td>
+                          <td className="p-2">
+                            <Badge className="bg-green-100 text-green-800">
+                              {message.status}
+                            </Badge>
+                          </td>
+                          <td className="p-2">
+                            <Button variant="outline" size="sm">
+                              Evaluate
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="flagged" className="mt-4">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">FAN ID</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">FAN NAME</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">CHATTER</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">CONTENT</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">TIMESTAMP</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">STATUS</th>
+                        <th className="text-left p-2 text-gray-600 dark:text-gray-400">REASON</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mockFlaggedMessages.map((message, index) => (
+                        <tr key={index} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <td className="p-2">{message.fanId}</td>
+                          <td className="p-2">{message.fanName}</td>
+                          <td className="p-2">{message.chatter}</td>
+                          <td className="p-2 max-w-md">{message.content}</td>
+                          <td className="p-2 text-xs">{message.timestamp}</td>
+                          <td className="p-2">
+                            <Badge className="bg-red-100 text-red-800">
+                              {message.status}
+                            </Badge>
+                          </td>
+                          <td className="p-2 text-xs">{message.reason}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="safe" className="mt-4">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <Shield className="h-16 w-16 mx-auto mb-4 text-green-500" />
+                  <p>No safe messages to display in demo mode</p>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+
+        {/* Recent Fans Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Fans</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2 text-gray-600 dark:text-gray-400">FAN</th>
+                    <th className="text-left p-2 text-gray-600 dark:text-gray-400">USERNAME</th>
+                    <th className="text-left p-2 text-gray-600 dark:text-gray-400">TOTAL SPEND</th>
+                    <th className="text-left p-2 text-gray-600 dark:text-gray-400">DAYS ACTIVE</th>
+                    <th className="text-left p-2 text-gray-600 dark:text-gray-400">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="text-center text-gray-500 dark:text-gray-400">
+                    <td colSpan={5} className="p-8">
+                      No recent fans data available
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
