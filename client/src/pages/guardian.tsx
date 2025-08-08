@@ -105,6 +105,35 @@ export default function Guardian() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dryRun, setDryRun] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [systemStatus, setSystemStatus] = useState<"operational" | "maintenance" | "down">("operational");
+
+  const getStatusDisplay = () => {
+    switch (systemStatus) {
+      case "operational":
+        return {
+          color: "bg-green-500",
+          textColor: "text-green-600 dark:text-green-400",
+          text: "Systems Operational",
+          pulseColor: "bg-green-500"
+        };
+      case "maintenance":
+        return {
+          color: "bg-yellow-500",
+          textColor: "text-yellow-600 dark:text-yellow-400",
+          text: "Under Maintenance",
+          pulseColor: "bg-yellow-500"
+        };
+      case "down":
+        return {
+          color: "bg-red-500",
+          textColor: "text-red-600 dark:text-red-400",
+          text: "System Down",
+          pulseColor: "bg-red-500"
+        };
+    }
+  };
+
+  const status = getStatusDisplay();
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -113,13 +142,32 @@ export default function Guardian() {
       <main className="max-w-7xl mx-auto p-4">
         <div className="mb-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                Fan Spend Fetcher
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Admin
-              </p>
+            <div className="flex items-center space-x-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                  Guardian
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Admin
+                </p>
+              </div>
+              <div 
+                className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => {
+                  const statuses: Array<"operational" | "maintenance" | "down"> = ["operational", "maintenance", "down"];
+                  const currentIndex = statuses.indexOf(systemStatus);
+                  const nextIndex = (currentIndex + 1) % statuses.length;
+                  setSystemStatus(statuses[nextIndex]);
+                }}
+              >
+                <div className="relative">
+                  <div className={`w-3 h-3 ${status.color} rounded-full animate-pulse`}></div>
+                  <div className={`absolute inset-0 w-3 h-3 ${status.pulseColor} rounded-full animate-ping opacity-75`}></div>
+                </div>
+                <span className={`text-sm ${status.textColor} font-medium`}>
+                  {status.text}
+                </span>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="default" size="sm">
