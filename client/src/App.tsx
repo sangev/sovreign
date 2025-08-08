@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Home from "@/pages/home";
 import ModelPage from "@/pages/model";
 import AnswerPage from "@/pages/answer";
+import Guardian from "@/pages/guardian";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/model/:model" component={ModelPage} />
       <Route path="/answer" component={AnswerPage} />
+      <Route path="/guardian" component={Guardian} />
       <Route component={NotFound} />
     </Switch>
   );
